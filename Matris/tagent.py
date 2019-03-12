@@ -3,7 +3,7 @@ import pyautogui
 import time
 import matris
 
-class Tagent:
+class Agent:
 	#qvalues: input is block, dict: input is (mask + action)
 	qvalues = [defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int), defaultdict(int)]
 	alpha = 0
