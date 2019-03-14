@@ -59,7 +59,6 @@ class Environment:
 			for i in range(22):
 				if board[(i,j)] != None and high > i:
 					high = i
-					break
 		return 22 - high
 		
 	def sendreward(self, defaultreward = 1, linereward = 5):

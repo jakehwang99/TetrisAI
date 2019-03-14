@@ -14,12 +14,14 @@ class Learner:
 	
 	def __init__(self, session, matris, timewait):
 		self.env = tenv.Environment(session, matris)
-		self.agent = tagent.Agent(learningrate = 0.7, discount = 0.7)
+		self.agent = tagent.Agent(learningrate = 0.3, discount = 0.7)
 		
 		matris.redraw()
 		
 		while self.update(session, matris, timewait):
-			print("learning")
+			if timewait >= 0.5:
+				print("learning")
+			
 		print("session done\n")
 	
 	def demoaction(self, session, matris):
@@ -53,16 +55,20 @@ class Learner:
 		matris.redraw()
 		time.sleep(timewait)
 		
-		if self.env.checkfail():
-			print(self.agent.updateq(currentstate, currentmask, currenti, currentblock, currentaction, -5, currentstate, 0))
-			return False
-		
-		nextstate = self.env.updatestate()
-		nextblock = self.convertblock(session.current_tetromino)
-		reward = self.env.sendreward(defaultreward = 0.5, linereward = 3)
-		
-		print(self.agent.updateq(currentstate, currentmask, currenti, currentblock, currentaction, reward, nextstate, nextblock))
-		
+		if timewait < 0.5:
+			nextstate = self.env.updatestate()
+			nextblock = self.convertblock(session.current_tetromino)
+			reward = self.env.sendreward(defaultreward = 2, linereward = 3)
+			
+			if self.env.checkfail():
+				print(self.agent.updateq(currentstate, currentmask, currenti, currentblock, currentaction, -1, nextstate, nextblock))
+				return False
+			else:
+				print(self.agent.updateq(currentstate, currentmask, currenti, currentblock, currentaction, reward, nextstate, nextblock))
+		else:
+			print(self.env.highestpoint())
+			if self.env.highestpoint() >= 18:
+				return False
 		return True
 		
 	def convertblock(self, block):

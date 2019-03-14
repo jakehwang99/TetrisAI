@@ -48,7 +48,7 @@ class Agent:
 				for j in range(2):
 					for i in range(len(mask2)):
 						if bestq < table[mask2[i] + str(j)]:
-							bestaction = j
+							bestaction = j + 1
 							bestmask = 2
 							besti = i
 							bestq = table[mask2[i] + str(j)]
@@ -121,15 +121,15 @@ class Agent:
 					if bestq < table[mask4[len(mask4) - i - 1] + "0"]:
 						bestaction = 0
 						bestmask = 4
-						besti = i
+						besti = len(mask4) - i - 1
 						bestq = table[mask4[len(mask4) - i - 1] + "0"]
 				#(1 flip) mask2: L, N
 				for j in range(2):
 					for i in range(len(mask2)):
 						if bestq < table[mask2[len(mask2) - i - 1] + str(j)]:
-							bestaction = j
+							bestaction = j + 1
 							bestmask = 2
-							besti = i
+							besti = len(mask2) - i - 1
 							bestq = table[mask2[len(mask2) - i - 1] + str(j)]
 						
 			elif block == 1:
@@ -139,7 +139,7 @@ class Agent:
 					if bestq < table[mask2[len(mask2) - i - 1] + "0"]:
 						bestaction = 0
 						bestmask = 2
-						besti = i
+						besti = len(mask2) - i - 1
 						bestq = table[mask2[len(mask2) - i - 1] + "0"]
 
 			elif block == 3 or block == 4:
@@ -149,7 +149,7 @@ class Agent:
 					if bestq < table[mask3[len(mask3) - i - 1] + "0"]:
 						bestaction = 0
 						bestmask = 3
-						besti = i
+						besti = len(mask3) - i - 1
 						bestq = table[mask3[len(mask3) - i - 1] + "0"]
 			
 				#(flip) mask2: N
@@ -157,9 +157,41 @@ class Agent:
 					if bestq < table[mask2[len(mask2) - i - 1] + "1"]:
 						bestaction = 1
 						bestmask = 2
-						besti = i
+						besti = len(mask2) - i - 1
 						bestq = table[mask2[len(mask2) - i - 1] + "1"]
-		
+			else:
+				#make more compact, combine for loops
+				#(no flip) mask3: N
+				for i in range(len(mask3)):
+					if bestq < table[mask3[len(mask3) - i - 1] + "0"]:
+						bestaction = 0
+						bestmask = 3
+						besti = len(mask3) - i - 1
+						bestq = table[mask3[len(mask3) - i - 1] + "0"]
+				
+				#(flip) mask2: N
+				for i in range(len(mask2)):
+					if bestq < table[mask2[len(mask2) - i - 1] + "1"]:
+						bestaction = 1
+						bestmask = 2
+						besti = len(mask2) - i - 1
+						bestq = table[mask2[len(mask2) - i - 1] + "1"]
+			
+				#(flip/flip) mask3: N
+				for i in range(len(mask3)):
+					if bestq < table[mask3[len(mask3) - i - 1] + "2"]:
+						bestaction = 2
+						bestmask = 3
+						besti = len(mask3) - i - 1
+						bestq = table[mask3[len(mask3) - i - 1] + "2"]
+					
+				#(flip/flip/flip/right) mask4: N
+				for i in range(len(mask2)):
+					if bestq < table[mask2[len(mask2) - i - 1] + "3"]:
+						bestaction = 3
+						bestmask = 2
+						besti = len(mask2) - i - 1
+						bestq = table[mask2[len(mask2) - i - 1] + "3"]
 		
 		if bestmask == 2:
 			return bestaction, mask2, bestmask, besti

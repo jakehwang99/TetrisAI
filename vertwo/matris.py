@@ -353,7 +353,7 @@ class Matris(object):
         self.set_tetrominoes()
 
         if not self.blend():
-            self.gameover_sound.play()
+            #self.gameover_sound.play()
             self.gameover()
             
         self.needs_redraw = True
@@ -441,9 +441,9 @@ class Game(object):
 		screen.blit(matris_border, (MATRIS_OFFSET,MATRIS_OFFSET))
 		
 		timewait = 0
-		print(age)
+		print("session:" + str(age))
 		if age % 100 == 0:
-			timewait = 1
+			timewait = 0.5
 		else:
 			timewait = 0.0001
 		
